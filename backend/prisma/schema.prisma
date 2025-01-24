@@ -1,0 +1,159 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Users{
+  id Int @id @default(autoincrement())
+  matricule String @unique
+  nom String
+  prenom String
+  email String
+  status Boolean @default(false)
+  password String?
+  isChefService Boolean @default(false)
+  isChefUnit Boolean @default(false)
+  isPersCellule Boolean @default(false)
+  isPersSecretariat Boolean @default(false)
+  isNew Boolean @default(true)
+  unite_id Int?
+  unite Unites? @relation("UserToUnit" , fields: [unite_id] , references: [id] , onDelete: Cascade , onUpdate: Cascade)
+
+  @@index([unite_id])
+
+}
+
+model Unites {
+  id    Int    @id @default(autoincrement())
+  nom  String @unique
+  isDivision Boolean @default(false)
+  isBureau Boolean @default(false)
+  isDependant Boolean @default(false)
+  division_id Int?
+  sur_division Unites? @relation("UnitToDivision" , fields: [division_id] , references: [id] , onDelete: NoAction , onUpdate: NoAction)
+  
+  
+  users Users[] @relation("UserToUnit")
+  bureaux Unites[] @relation("UnitToDivision")
+  stages Stages[] @relation("StageToUnite")
+
+  @@index([division_id])
+}
+
+
+model Demande{
+  id Int @id @default(autoincrement())
+  numero String @unique
+  date_arrive DateTime
+  cv_lien String?
+  lm_lien String?
+  isRegistred Boolean @default(false)
+  isNew Boolean @default(true)
+}
+
+model Stagiaires {
+  id Int @id @default(autoincrement())
+  nom String
+  prenom String
+  email String
+  phone String
+  filiere String
+  etablissement String
+  debut_demande DateTime?
+  duree Int
+  observation String?
+  cv_lien String?
+  lm_lien String?
+  isNew Boolean @default(true)
+  status Boolean @default(false)
+
+  stages Stages[] @relation("StageStagiaire")
+  entretiens Entretients[] @relation("EntretientStagiaire")
+}
+
+
+model Stages {
+  id Int @id @default(autoincrement())
+  theme_provisoir String
+  theme_definitif String?
+  unite_id Int?
+  stagiaire_id Int?
+  status Boolean @default(false)
+  observation String
+  date_debut DateTime
+  date_fin DateTime
+  isNew Boolean @default(true)
+  book_link String?
+  unite Unites? @relation("StageToUnite" , fields: [unite_id] , references: [id] , onDelete: Cascade , onUpdate: Cascade)
+  stagiaire Stagiaires? @relation("StageStagiaire",fields: [stagiaire_id] , references: [id] , onDelete: Cascade , onUpdate: Cascade)
+
+  attestation Attestation?
+  performance Performances?
+  taches Taches[] @relation("TacheStage")
+
+
+  @@index([unite_id])
+  @@index([stagiaire_id])
+}
+
+
+model Attestation  {
+  id Int @id @default(autoincrement())
+  numero String ?
+  status Boolean @default(false)
+  stage_id Int? @unique
+  isInforme Boolean @default(false)
+  isCollected Boolean @default(false)
+  isNew Boolean @default(false)
+  stage Stages? @relation(fields: [stage_id] , references: [id] , onDelete: Cascade , onUpdate: Cascade)
+}
+
+
+model Performances {
+  id Int @id @default(autoincrement())
+  pertinance_pro  String
+  pertinance_tech  String
+  pertinance_pedago  String
+  observation String
+  stage_id Int? @unique
+  stage Stages? @relation(fields: [stage_id] , references: [id] , onDelete: Cascade , onUpdate: Cascade)
+}
+
+
+model Taches {
+  id Int @id @default(autoincrement()) 
+  nom String
+  description String?
+  status Boolean @default(false)
+  observation String 
+  date_fin DateTime
+  stage_id Int?
+  stage Stages? @relation("TacheStage" , fields: [stage_id] , references: [id] , onDelete: Cascade , onUpdate: Cascade)
+
+  @@index([stage_id])
+}
+
+
+model Entretients {
+  id Int @id @default(autoincrement())
+  status Boolean @default(false)  
+  date_entretien DateTime?
+  stagiaire_id Int?
+  isInforme Boolean @default(false)
+  isNew Boolean @default(true)
+
+  stagiaire Stagiaires? @relation("EntretientStagiaire" , fields: [stagiaire_id] , references: [id] , onDelete: Cascade , onUpdate: Cascade)
+
+  @@index([stagiaire_id])
+}

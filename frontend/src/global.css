@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base{
+    body{
+        @apply font-[figTree] font-medium;
+    }
+}
+
+
+.blue-toast{
+    background-color: rgb(13, 166, 255);
+    color: white;
+}
+
+.blue-progress-background{
+    background-color: rgba(13, 166, 255, 0.785);;
+}
+
+
+.fl-row{
+    @apply flex flex-row
+}
+
+.fl-col{
+    @apply flex flex-col
+}
+
+.btn-primary{
+    @apply px-4 py-1 rounded-lg text-white bg-blue-500 hover:bg-blue-600
+}
+
+.btn-cancel{
+    @apply px-4 py-1 rounded-lg text-white bg-gray-500 hover:bg-gray-600
+}
+
+.under-line{
+    @apply pb-2 border-b-2 border-gray-300
+}
+
+  
+:root{
+    --toastify-color-success: #2483fe;
+
+    --toastify-icon-color-success: var(--toastify-color-success);
+    --toastify-color-progress-success: var(--toastify-color-success);
+}
+
+
+/* ${
+    active
+      ? "bg-gray-100 text-blue-400"
+      : ""
+  } */

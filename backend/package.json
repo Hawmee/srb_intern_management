@@ -1,0 +1,39 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/storage": "^7.13.0",
+    "@prisma/client": "^5.21.0",
+    "axios": "^1.7.8",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "googleapis": "^144.0.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "neverbounce": "^4.4.1",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.16",
+    "socket.io": "^4.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7",
+    "prisma": "^5.21.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon src/index.js",
+    "seed": "node prisma/seed.js",
+    "migrate": "prisma migrate",
+    "studio": "prisma studio"
+  },
+  "type": "module"
+}
